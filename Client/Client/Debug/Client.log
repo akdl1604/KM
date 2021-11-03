@@ -1,3 +1,5 @@
-﻿  ClientDlg.cpp
-C:\Users\BIT\Documents\GitHub\KM\Client\Client\ClientDlg.cpp(78,8): warning C4101: 'bNameValid' :참조되지 않은 지역 변수입니다.
+﻿  ConnectSocket.cpp
+  Client.cpp
+  ClientDlg.cpp
+  코드를 생성하고 있습니다...
   Client.vcxproj -> C:\Users\BIT\Documents\GitHub\KM\Client\Debug\Client.exe

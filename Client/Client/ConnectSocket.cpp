@@ -1,4 +1,4 @@
-﻿// ConnectSocket.cpp: 구현 파일
+﻿// CConnectSocket.cpp: 구현 파일
 //
 
 #include "pch.h"
@@ -19,6 +19,7 @@ CConnectSocket::~CConnectSocket()
 
 
 // CConnectSocket 멤버 함수
+
 
 void CConnectSocket::OnClose(int nErrorCode)
 {
@@ -41,6 +42,8 @@ void CConnectSocket::OnReceive(int nErrorCode)
 	if (Receive(szBuffer, sizeof(szBuffer)) > 0)
 	{
 		CClientDlg* pMain = (CClientDlg*)AfxGetMainWnd();
+		pMain->m_List.AddString(szBuffer); // 리스트에 문자열을 추가한다.
+		pMain->m_List.SetCurSel(pMain->m_List.GetCount() - 1);
 	}
 	CSocket::OnReceive(nErrorCode);
 }

@@ -33,4 +33,9 @@ protected:
 	afx_msg void OnPaint();
 	afx_msg HCURSOR OnQueryDragIcon();
 	DECLARE_MESSAGE_MAP()
+public:
+	CListBox m_List;
+	CEdit m_Edit;
+	CString m_strMessage;
+
 };

@@ -9,6 +9,7 @@
 #include "ConnectSocket.h"
 #include "afxdialogex.h"
 
+
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
@@ -20,12 +21,12 @@ class CAboutDlg : public CDialogEx
 public:
 	CAboutDlg();
 
-	// 대화 상자 데이터입니다.
+// 대화 상자 데이터입니다.
 #ifdef AFX_DESIGN_TIME
 	enum { IDD = IDD_ABOUTBOX };
 #endif
 
-protected:
+	protected:
 	virtual void DoDataExchange(CDataExchange* pDX);    // DDX/DDV 지원입니다.
 
 // 구현입니다.
@@ -33,6 +34,9 @@ protected:
 	DECLARE_MESSAGE_MAP()
 };
 
+CAboutDlg::CAboutDlg() : CDialogEx(IDD_ABOUTBOX)
+{
+}
 
 void CAboutDlg::DoDataExchange(CDataExchange* pDX)
 {
@@ -54,7 +58,6 @@ CClientDlg::CClientDlg(CWnd* pParent /*=nullptr*/)
 void CClientDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-
 }
 
 BEGIN_MESSAGE_MAP(CClientDlg, CDialogEx)
@@ -72,14 +75,21 @@ BOOL CClientDlg::OnInitDialog()
 
 	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
 
+	// IDM_ABOUTBOX는 시스템 명령 범위에 있어야 합니다.
+	ASSERT((IDM_ABOUTBOX & 0xFFF0) == IDM_ABOUTBOX);
+	ASSERT(IDM_ABOUTBOX < 0xF000);
+
 	CMenu* pSysMenu = GetSystemMenu(FALSE);
 	if (pSysMenu != nullptr)
 	{
 		BOOL bNameValid;
 		CString strAboutMenu;
+		bNameValid = strAboutMenu.LoadString(IDS_ABOUTBOX);
+		ASSERT(bNameValid);
 		if (!strAboutMenu.IsEmpty())
 		{
 			pSysMenu->AppendMenu(MF_SEPARATOR);
+			pSysMenu->AppendMenu(MF_STRING, IDM_ABOUTBOX, strAboutMenu);
 		}
 	}
 
@@ -90,7 +100,7 @@ BOOL CClientDlg::OnInitDialog()
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
 	m_Socket.Create();
-	if (m_Socket.Connect(L"127.0.0.1", 9000) == FALSE)
+	if (m_Socket.Connect(L"192.168.1.7", 9000) == FALSE)
 	{
 		AfxMessageBox(L"ERROR: Failed to connect server");
 		PostQuitMessage(0);
@@ -101,7 +111,15 @@ BOOL CClientDlg::OnInitDialog()
 
 void CClientDlg::OnSysCommand(UINT nID, LPARAM lParam)
 {
-
+	if ((nID & 0xFFF0) == IDM_ABOUTBOX)
+	{
+		CAboutDlg dlgAbout;
+		dlgAbout.DoModal();
+	}
+	else
+	{
+		CDialogEx::OnSysCommand(nID, lParam);
+	}
 }
 
 // 대화 상자에 최소화 단추를 추가할 경우 아이콘을 그리려면
@@ -139,4 +157,8 @@ HCURSOR CClientDlg::OnQueryDragIcon()
 {
 	return static_cast<HCURSOR>(m_hIcon);
 }
+
+
+
+
 

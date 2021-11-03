@@ -20,7 +20,7 @@
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>16.0</VCProjectVersion>
-    <ProjectGuid>{2C0BA2A8-555D-42C9-A6C4-BF2D4DE2666C}</ProjectGuid>
+    <ProjectGuid>{0C9A80D3-B9EF-4429-BA58-0B56EF670840}</ProjectGuid>
     <Keyword>MFCProj</Keyword>
     <RootNamespace>Client</RootNamespace>
     <WindowsTargetPlatformVersion>10.0</WindowsTargetPlatformVersion>
@@ -183,18 +183,18 @@
     </ResourceCompile>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClInclude Include="ConnectSocket.h" />
     <ClInclude Include="Client.h" />
     <ClInclude Include="ClientDlg.h" />
-    <ClInclude Include="ConnectSocket.h" />
     <ClInclude Include="framework.h" />
     <ClInclude Include="pch.h" />
     <ClInclude Include="Resource.h" />
     <ClInclude Include="targetver.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="ConnectSocket.cpp" />
     <ClCompile Include="Client.cpp" />
     <ClCompile Include="ClientDlg.cpp" />
-    <ClCompile Include="ConnectSocket.cpp" />
     <ClCompile Include="pch.cpp">
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">Create</PrecompiledHeader>
       <PrecompiledHeader Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">Create</PrecompiledHeader>
