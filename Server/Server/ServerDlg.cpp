@@ -65,6 +65,7 @@ void CServerDlg::DoDataExchange(CDataExchange* pDX)
 	CDialogEx::DoDataExchange(pDX);
 	DDX_Control(pDX, IDC_LIST1, m_ctrlListSock);
 	DDX_Control(pDX, IDC_LIST3, m_ctrlListResult);
+	DDX_Control(pDX, IDC_RESULT_TAB1, m_Result_Tab);
 }
 
 BEGIN_MESSAGE_MAP(CServerDlg, CDialogEx)
@@ -73,6 +74,7 @@ BEGIN_MESSAGE_MAP(CServerDlg, CDialogEx)
 	ON_WM_QUERYDRAGICON()
 	ON_WM_SYSCOMMAND()
 	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CServerDlg::OnTcnSelchangeTab1)
+	ON_NOTIFY(TCN_SELCHANGE, IDC_RESULT_TAB1, &CServerDlg::OnTcnSelchangeResultTab1)
 END_MESSAGE_MAP()
 
 
@@ -89,6 +91,19 @@ BOOL CServerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
+	
+	m_Result_Tab.InsertItem(0, "Statistics");
+	m_Result_Tab.InsertItem(1, "S/F");
+	m_Result_Tab.SetCurSel(0);
+	CRect rc;
+	
+	m_Result_Tab.GetWindowRect(rc);
+	
+	pDlg1 = new CTab1; //Tab1추가
+	
+	pDlg1->Create(IDD_Tab1, &m_Result_Tab); // m_Result_Tab에 생성
+	pDlg1->MoveWindow(0, 20, rc.Width(), rc.Height()); //크기조절
+	pDlg1->ShowWindow(SW_SHOW); //표시	
 
 	pServer->Start(9000);
 
@@ -136,5 +151,25 @@ HCURSOR CServerDlg::OnQueryDragIcon()
 void CServerDlg::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
 {
 	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
+	*pResult = 0;
+}
+
+
+void CServerDlg::OnTcnSelchangeResultTab1(NMHDR* pNMHDR, LRESULT* pResult)
+{
+	if (IDC_TAB1 == pNMHDR->idFrom)
+	{
+		int iSelect = m_Result_Tab.GetCurSel(); // 선택한 위치 확인
+
+		switch (iSelect) {
+		case 0:
+			pDlg1->ShowWindow(SW_SHOW);
+			break;
+		case 1:
+			pDlg1->ShowWindow(SW_HIDE);
+			break;
+		}
+
+	}
 	*pResult = 0;
 }

@@ -3,7 +3,7 @@
 //
 
 #pragma once
-
+#include "CTab1.h"
 
 // CServerDlg 대화 상자
 class CServerDlg : public CDialogEx
@@ -36,4 +36,7 @@ public:
 	CListBox m_ctrlListSock;
 	CListBox m_ctrlListResult;
 	afx_msg void OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult);
+	afx_msg void OnTcnSelchangeResultTab1(NMHDR* pNMHDR, LRESULT* pResult);
+	CTab1* pDlg1;
+	CTabCtrl m_Result_Tab;
 };
