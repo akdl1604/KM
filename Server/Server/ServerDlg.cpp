@@ -7,72 +7,36 @@
 #include "Server.h"
 #include "ServerDlg.h"
 #include "afxdialogex.h"
+#include "ClientSocket.h"
+#include "ListenSocket.h"
 
 #ifdef _DEBUG
 #define new DEBUG_NEW
 #endif
 
-
 // CServerDlg 대화 상자
 
-CServerDlg* g_pMainDlg;
-
-void LogMessage(int type, TCHAR* msg)
-{
-	CString str_Sock, str_Result;
-	if (type == 0)
-		str_Sock.Format("[오류] %s\n", msg);
-	else if (type == 1)
-		str_Sock.Format("%s\n", msg);        //서버실행
-	else if (type == 2)
-		str_Sock.Format("[클라이언트 접속] %s\n", msg);
-	else if (type == 3)
-		str_Sock.Format("[클라이언트 해제] %s\n", msg);
-	else if (type == 4)
-		str_Result.Format("[데이터 수신] %s\n", msg);
-	else if (type == 5)
-		str_Result.Format("[데이터 송신] %s\n", msg);
-
-	//	g_pMainDlg->SetWindowText(str);
-
-		//::SendMessage(g_pMainDlg->m_ctrlList1.m_hWnd, LB_ADDSTRING, (LPARAM)str.GetBuffer(), 0);
-	g_pMainDlg->m_ctrlListSock.AddString(str_Sock);
-	g_pMainDlg->m_ctrlListResult.AddString(str_Result);
-}
-
-void RecvMessage(TCHAR* msg)
-{
-
-}
 
 
 CServerDlg::CServerDlg(CWnd* pParent /*=nullptr*/)
 	: CDialogEx(IDD_SERVER_DIALOG, pParent)
 {
+
 	m_hIcon = AfxGetApp()->LoadIcon(IDR_MAINFRAME);
-	pServer = new ServerSock(LogMessage, RecvMessage);
 
-	g_pMainDlg = this;
-}
-
-CServerDlg::~CServerDlg()
-{
-	delete pServer;
 }
 
 void CServerDlg::DoDataExchange(CDataExchange* pDX)
 {
 	CDialogEx::DoDataExchange(pDX);
-	DDX_Control(pDX, IDC_LIST1, m_ctrlListSock);
-	DDX_Control(pDX, IDC_LIST3, m_ctrlListResult);
+	DDX_Control(pDX, IDC_LIST1, m_List);
 }
 
 BEGIN_MESSAGE_MAP(CServerDlg, CDialogEx)
 	ON_WM_SYSCOMMAND()
 	ON_WM_PAINT()
 	ON_WM_QUERYDRAGICON()
-	ON_WM_SYSCOMMAND()
-	ON_NOTIFY(TCN_SELCHANGE, IDC_TAB1, &CServerDlg::OnTcnSelchangeTab1)
+	ON_WM_DESTROY()
 END_MESSAGE_MAP()
 
 
@@ -82,6 +46,9 @@ BOOL CServerDlg::OnInitDialog()
 {
 	CDialogEx::OnInitDialog();
 
+	// 시스템 메뉴에 "정보..." 메뉴 항목을 추가합니다.
+	clientList = (CListBox*)GetDlgItem(IDC_LIST_SOCK);
+
 
 	// 이 대화 상자의 아이콘을 설정합니다.  응용 프로그램의 주 창이 대화 상자가 아닐 경우에는
 	//  프레임워크가 이 작업을 자동으로 수행합니다.
@@ -89,11 +56,21 @@ BOOL CServerDlg::OnInitDialog()
 	SetIcon(m_hIcon, FALSE);		// 작은 아이콘을 설정합니다.
 
 	// TODO: 여기에 추가 초기화 작업을 추가합니다.
-
-	pServer->Start(9000);
+	if (m_ListenSocket.Create(9000, SOCK_STREAM)) // 소켓생성
+	{
+		if (!m_ListenSocket.Listen())
+		{
+			AfxMessageBox(_T("ERROR: Listen() return FALSE"));
+		}
+	}
+	else
+	{
+		AfxMessageBox(_T("ERROR: Failed to create server socket!"));
+	}
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }
+
 
 // 대화 상자에 최소화 단추를 추가할 경우 아이콘을 그리려면
 //  아래 코드가 필요합니다.  문서/뷰 모델을 사용하는 MFC 애플리케이션의 경우에는
@@ -133,8 +110,31 @@ HCURSOR CServerDlg::OnQueryDragIcon()
 
 
 
-void CServerDlg::OnTcnSelchangeTab1(NMHDR* pNMHDR, LRESULT* pResult)
+void CServerDlg::OnDestroy()
 {
-	// TODO: 여기에 컨트롤 알림 처리기 코드를 추가합니다.
-	*pResult = 0;
+	CDialogEx::OnDestroy();
+
+	// TODO: 여기에 메시지 처리기 코드를 추가합니다.
+	POSITION pos;
+	pos = m_ListenSocket.m_ptrClientSocketList.GetHeadPosition();
+	CClientSocket* pClient = NULL;
+
+	// 생성되어있는 클라이언트 소켓이 없을때까지 체크하여 소켓닫기
+	while (pos != NULL)
+	{
+		pClient = (CClientSocket*)m_ListenSocket.m_ptrClientSocketList.GetNext(pos);
+
+		if (pClient != NULL)
+		{
+			pClient->ShutDown(); // 연결된 상대방 소켓에 연결이 종료됨을 알린다. 
+			pClient->Close(); // 소켓을 닫는다
+
+			delete pClient;
+		}
+	}
+	m_ListenSocket.ShutDown();
+	m_ListenSocket.Close();
 }
+
+
+

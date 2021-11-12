@@ -6,6 +6,7 @@
 #define IDD_DIALOG1                     130
 #define IDD_SERVER_DIALOG               130
 #define IDC_LIST1                       1000
+#define IDC_LIST_SOCK                   1000
 #define IDC_TAB1                        1001
 #define IDC_LIST2                       1002
 #define IDC_BUTTON1                     1003
@@ -16,7 +17,8 @@
 #define IDC_EDIT5                       1008
 #define IDC_EDIT6                       1009
 #define IDC_LIST3                       1010
-
+#define IDC_LIST_RESULT                 1010
+#define IDP_SOCKETS_INIT_FAILED			103
 // Next default values for new objects
 // 
 #ifdef APSTUDIO_INVOKED

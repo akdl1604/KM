@@ -34,7 +34,10 @@ protected:
 	DECLARE_MESSAGE_MAP()
 public:
 	CListBox m_List;
-	CEdit m_Edit;
-	CString m_strMessage;
+	CListBox m_ptrConnect;
 
+public:
+	afx_msg void OnClose();
+	CEdit m_Edit;
+	afx_msg void OnBnClickedButton2();
 };
