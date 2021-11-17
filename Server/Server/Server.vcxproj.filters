@@ -36,9 +36,6 @@
     <ClInclude Include="ServerSock.h">
       <Filter>헤더 파일</Filter>
     </ClInclude>
-    <ClInclude Include="m_Tab1.h">
-      <Filter>헤더 파일</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Server.cpp">
@@ -51,9 +48,6 @@
       <Filter>소스 파일</Filter>
     </ClCompile>
     <ClCompile Include="ServerSock.cpp">
-      <Filter>소스 파일</Filter>
-    </ClCompile>
-    <ClCompile Include="m_Tab1.cpp">
       <Filter>소스 파일</Filter>
     </ClCompile>
   </ItemGroup>

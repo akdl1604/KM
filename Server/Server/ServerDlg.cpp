@@ -105,7 +105,7 @@ BOOL CServerDlg::OnInitDialog()
 	pDlg1->MoveWindow(0, 20, rc.Width(), rc.Height()); //크기조절
 	pDlg1->ShowWindow(SW_SHOW); //표시	
 
-	pServer->Start(9000);
+	//pServer->Start(9000);
 
 	return TRUE;  // 포커스를 컨트롤에 설정하지 않으면 TRUE를 반환합니다.
 }

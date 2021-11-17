@@ -11,4 +11,9 @@
 // 여기에 미리 컴파일하려는 헤더 추가
 #include "framework.h"
 #include "ServerSock.h"
+#include <tchar.h>
+#include <ws2tcpip.h>
+#include <exception>
+#include <vector>
+using namespace std;
 #endif //PCH_H
